@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../contexts/auth';
 import logo from '../../assets/logo.png';
 
 function SignUp() {
@@ -8,9 +9,14 @@ function SignUp() {
   const [email, setEmail] = useState(''); 
   const [password, setPassword] = useState('');
 
+  const { signUp, loadingAuth } = useContext(AuthContext);
+
   function handleSubmit(event){
     event.preventDefault();
-    alert("Clicou!!" + email + " " + password);
+
+    if(name !== '' && email !== '' && password !== ''){
+      signUp(email, password, name)
+    }
   }
 
   return (
@@ -25,7 +31,7 @@ function SignUp() {
             <input type="text" placeholder='Seu nome' value={name} onChange={(event) => setName(event.target.value) } />
             <input type="text" placeholder='email@dominio.com' value={email} onChange={(event) => setEmail(event.target.value) } />
             <input type="password" placeholder='********' value={password} onChange={(event) => setPassword(event.target.value) } />
-            <button type='submit'>Cadastrar</button>
+            <button type='submit'>{loadingAuth ? 'Cadastrando...': 'Cadastrar'}</button>
           </form>
           <Link to="/">Já tenho uma conta</Link>
         </div>
