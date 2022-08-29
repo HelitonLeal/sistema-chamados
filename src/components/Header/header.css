@@ -52,11 +52,19 @@
     color: #fff;
 }
 
+.content{
+    margin-left: 200px;
+    padding: 1px 16px;
+}
 @media screen and (max-width: 700px) {
     .sidebar{
         width: 100%;
         height: auto;
         position: relative;
+    }
+
+    div.content{
+        margin-left: 0;
     }
     
     .sidebar a{
