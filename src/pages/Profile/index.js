@@ -6,7 +6,7 @@ import Title from '../../components/Title';
 import avatar from '../../assets/avatar.png';
 
 import firebase from '../../services/firebaseConnection';
-import { AuthContext} from '../../contexts/auth'
+import { AuthContext} from '../../contexts/auth';
 
 import { FiSettings, FiUpload } from 'react-icons/fi';
 
@@ -20,6 +20,7 @@ export default function Profile(){
     const [avatarUrl, setAvatarUrl] = useState(user && user.avatarUrl);
     const [imageAvatar, setImageAvatar] = useState(null);
 
+// --------------------------------------------------------------------------------------------->
 
     function handleFile(event){
         if(event.target.files[0]){
@@ -34,7 +35,7 @@ export default function Profile(){
             }
         }
     }
-    
+// --------------------------------------------------------------------------------------------->
 
     async function handleUpload(){
         const currentuid = user.uid;
@@ -68,7 +69,7 @@ export default function Profile(){
             })
         })
     }
-
+// --------------------------------------------------------------------------------------------->
 
     async function handleSave(event){
         event.preventDefault();
@@ -95,6 +96,7 @@ export default function Profile(){
             handleUpload();
         }
     }
+// --------------------------------------------------------------------------------------------->
 
     return(
         <div>
@@ -123,14 +125,11 @@ export default function Profile(){
                         <input type="text" value={email} disabled={true} />
 
                         <button type='submit'>Salvar</button>
-
                     </form>
                 </div>
                 <div className='container'>
                     <button className='logout-btn' onClick={() => signOut()}>Sair</button>
-
                 </div>
-
             </div>
         </div>
     );
