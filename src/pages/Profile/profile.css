@@ -45,7 +45,7 @@
     font-size: 1.4em;
 }
 
-.form-profile input{
+.form-profile input, textarea, select{
     margin-bottom: 1em;
     padding: .7em;
     border: 0;
