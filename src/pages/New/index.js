@@ -1,9 +1,11 @@
 import { useState, useEffect, useContext } from 'react';
-import { AuthContext } from '../../contexts/auth';
+
 import firebase from '../../services/firebaseConnection';
 
 import Header from '../../components/Header';
 import Title from '../../components/Title';
+import { AuthContext } from '../../contexts/auth';
+import { toast } from 'react-toastify';
 
 import { FiPlus } from 'react-icons/fi';
 import './new.css';
@@ -53,9 +55,28 @@ export default function New(){
     }, [])
 // --------------------------------------------------------------------------------------------->
 
-    function handleRegister(event){
+    async function handleRegister(event){
         event.preventDefault();
-        alert('Clicou');
+
+        await firebase.firestore().collection('chamados')
+        .add({
+            created: new Date(),
+            cliente: customers[customerSelected].nomeFantasia,
+            clienteId: customers[customerSelected].id,
+            assunto: assunto,
+            status: status,
+            complemento: complemento,
+            userId: user.uid
+        })
+        .then(() => {
+            toast.success('Chamado Registrado com Sucesso!!');
+            setComplemento('');
+            setCustomerSelected(0);
+        })
+        .catch((error) => {
+            toast.error('Erro ao Registrar, tente novamente mais tarde!');
+            console.log(error);
+        })
     }
 // --------------------------------------------------------------------------------------------->
 
@@ -105,6 +126,7 @@ export default function New(){
                             <option value='Visita Técnica'>Visita Técnica</option>
                             <option value='Financeiro'>Financeiro</option>
                         </select>
+                        
                         <label>Status</label>
                         <div className='status'>
                             <input type='radio' name='radio' value='Aberto' onChange={handleOptionChange}
@@ -119,9 +141,11 @@ export default function New(){
                                 checked={status === 'Fechado'} />
                             <span>Fechado</span>
                         </div>
+                        
                         <label>Complemento</label>
                         <textarea type='text' placeholder='Descreva sua solicitação (Opcional)' value={complemento}
                         onChange={ (event) => setComplemento(event.target.value) } />
+                        
                         <button type='submit'>Registrar</button>
                     </form>
                 </div>
