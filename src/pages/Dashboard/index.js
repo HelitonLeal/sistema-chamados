@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 
 import firebase from '../../services/firebaseConnection';
+import Modal from '../../components/Modal';
 
 const listRef = firebase.firestore().collection('chamados').orderBy('created', 'desc');
 
@@ -19,8 +20,22 @@ export default function Dashboard(){
     const [isEmpty, setIsEmpty] = useState(false);
     const [lastDocs, setLastDocs] = useState();
 
-    useEffect(() => {
+    const [showPostModal, setShowPostModal] = useState(false);
+    const [detail, setDetail] = useState();
 
+    useEffect(() => {
+        async function loadChamados(){
+            await listRef.limit(5)
+            .get()
+            .then((snapshot) => {
+                updateState(snapshot);
+            })
+            .catch((error) => {
+                console.log(error);
+                setLoadingMore(false);
+            })
+            setLoading(false);
+        }
         loadChamados();
 
         return () => {
@@ -29,18 +44,7 @@ export default function Dashboard(){
     }, []);
 // --------------------------------------------------------------------------------------------->
 
-    async function loadChamados(){
-        await listRef.limit(5)
-        .get()
-        .then((snapshot) => {
-            updateState(snapshot);
-        })
-        .catch((error) => {
-            console.log(error);
-            setLoadingMore(false);
-        })
-        setLoading(false);
-    }
+    
 // --------------------------------------------------------------------------------------------->
 
     async function updateState(snapshot){
@@ -78,6 +82,12 @@ export default function Dashboard(){
         .then((snapshot) => {
             updateState(snapshot);
         })
+    }
+// --------------------------------------------------------------------------------------------->
+
+    function togglePostModal(item){
+        setShowPostModal(!showPostModal);
+        setDetail(item);
     }
 // --------------------------------------------------------------------------------------------->
 
@@ -143,10 +153,12 @@ if(loading){
                                             </td>
                                             <td data-label='Criado em'>{item.createdFormated}</td>
                                             <td data-label='#'>
-                                                <button className='action' style={{ backgroundColor: '#3583f6' }}>
+                                                <button className='action' style={{ backgroundColor: '#3583f6' }}
+                                                onClick={ () => togglePostModal(item) } >
                                                     <FiSearch color='#fff' size={18} />
                                                 </button>
-                                                <button className='action' style={{backgroundColor: '#f6a935'}}>
+                                                <button className='action' style={{backgroundColor: '#f6a935'}}
+                                                onClick={ () => {} } >
                                                     <FiEdit2 color='#fff' size={18} />
                                                 </button>
                                             </td>
@@ -161,6 +173,12 @@ if(loading){
                 )}
 
             </div>
+            {showPostModal && (
+            <Modal
+                conteudo={detail}
+                close={togglePostModal}
+            />
+            )}
         </div>
     );
 }
