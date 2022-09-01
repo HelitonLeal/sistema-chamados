@@ -157,10 +157,10 @@ if(loading){
                                                 onClick={ () => togglePostModal(item) } >
                                                     <FiSearch color='#fff' size={18} />
                                                 </button>
-                                                <button className='action' style={{backgroundColor: '#f6a935'}}
-                                                onClick={ () => {} } >
+                                                <Link className='action' style={{backgroundColor: '#f6a935'}}
+                                                to={`/new/${item.id}`} >
                                                     <FiEdit2 color='#fff' size={18} />
-                                                </button>
+                                                </Link>
                                             </td>
                                         </tr>
                                     );
